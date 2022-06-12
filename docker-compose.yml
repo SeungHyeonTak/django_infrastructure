@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  db:
+    restart: always
+    image: postgres:latest
+    container_name: db
+    hostname: db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=infra_db
+      - POSTGRES_USER=mason
+      - POSTGRES_PASSWORD=1234qwer
+  web:
+    build: .
+    container_name: web
+    restart: always
+    hostname: web
+    env_file: .env
+    command: python manage.py runserver 0.0.0.0:8001
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/django_Infrastructure

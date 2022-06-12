@@ -14,6 +14,8 @@ Dockerfile은 Docker 이미지 빌드 될때 거쳐야하는 단계를 정의하
 
 일단, 최상위 경로에 Dockerfile을 생성하고 그 안에 내용을 입력하자.
 
+**Dockerfile**
+
 ```Dockerfile
 FROM python:3.9.5
 ENV PYTHONUNBUFFERED 1
@@ -39,6 +41,39 @@ EXPOSE 8000
   - pip를 이용해서 이미지 안에 패키지 설치
 - EXPOSE 8000
   - 호스트와 연결할 포트 번호를 설정해 준다.
+
+**Docker image 생성**
+
+```shell
+$ docker build -t [생성하고자 하는 도커 이미지 이름] .
+$ docker images # docker images 확인
+```
+
+**Docker run**
+
+- 제대로 실행되는지 테스트 해보기 위해 실행시켜서 확인한다.
+
+docker run -p [호스트포트]:[컨테이너포트] [생성한 이미지 이름]
+
+```shell
+$ docker run -p 8000:8000 mason/docker_example
+```
+
+백그라운드 실행
+
+```shell
+$ docker run -d -p 8000:8000 mason/docker_example
+```
+
+**docker-compose.yml**
+
+```yaml
+version: "3"
+
+services: 
+    web: 
+      
+```
 
 ### CI/CD (AWS 파이프 라인)
 
