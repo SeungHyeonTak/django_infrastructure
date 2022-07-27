@@ -2,13 +2,16 @@ FROM python:3.9.5
 
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /django_Infrastructure
+ARG PROJECT_DIR="/django_Infrastructure"
+
+WORKDIR ${PROJECT_DIR}
 
 COPY . .
 
-RUN apt-get -y update
-RUN apt-get -y install vim
-
+RUN apt-get update -y
+RUN pip install -U pip
 RUN pip install -r requirements.txt
 
-EXPOSE 8000
+CMD python manage.py migrate; python manage.py runserver 0:80
+
+EXPOSE 80
