@@ -1,28 +1,33 @@
 version: "3.9"
 
 services:
-  web:
-    build: .
+  api:
+    build:
+      context: .
+      dockerfile: .build/dockerfiles/local/Dockerfile.api
+    container_name: api
+    hostname: api
     restart: always
     ports:
       - "80:80"
     volumes:
-      - .:/django_Infrastructure
-    depends_on:
-      - db
+      - .:/app
+    working_dir: /app/
+    env_file: .env
 
   db:
-    image: postgres:13.4
-    container_name: postgres
-    hostname: postgres
-    restart: always
+    image: postgres:10
+    container_name: db
+    hostname: db
+    restart: unless-stopped
     volumes:
       - db:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=infra_db
-      - POSTGRES_USER=mason
-      - POSTGRES_PASSWORD=1234qwer
+    expose:
+      - 5432
+    env_file:
+      - .build/env/local/.env.db
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "admin"]
+
 volumes:
   db:

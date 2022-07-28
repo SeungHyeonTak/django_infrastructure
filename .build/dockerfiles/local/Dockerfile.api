@@ -1,0 +1,16 @@
+FROM python:3.9.5
+
+# 라이브러리 설치
+RUN apt-get update -y
+COPY ./.build/requirements/requirements.api.txt /app/requirements.txt
+RUN pip install -U pip
+RUN pip install -r /app/requirements.txt
+COPY . /app
+
+# 프로젝트 폴더로 이동
+WORKDIR /app
+
+# 프로젝트 실행
+CMD python manage.py migrate; python manage.py runserver 0:80
+
+EXPOSE 80
